@@ -1,0 +1,66 @@
+// Arduino Obstacle Avoidance + Voice Control Robot
+// Created by DIY Builder
+//Contact me here https://www.instagram.com/diy.builder/
+//You need to install the AFMotor and NewPing Libraries before uplodaing the sketch
+
+#include <AFMotor.h>
+#include <NewPing.h>
+#include<Servo.h>
+#define TRIGGER_PIN A1
+#define ECHO_PIN A0
+#define MAX_DISTANCE 300
+#define IR A5
+
+AF_DCMotor motor1(1, MOTOR12_1KHZ);
+AF_DCMotor motor2(2, MOTOR12_1KHZ);
+AF_DCMotor motor3(3, MOTOR34_1KHZ);
+AF_DCMotor motor4(4, MOTOR34_1KHZ);
+
+
+
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+
+Servo myservo;
+
+String voice;
+
+void setup() {
+Serial.begin(9600);
+myservo.attach(10);
+myservo.write(90);
+pinMode(IR, INPUT);
+
+}
+
+void loop() {
+  int distance = sonar.ping_cm();
+  //int IR1 = digitalRead(IR);
+  //Serial.println(IR1);
+  
+if(Serial.available()>0) {
+  voice="";
+  delay(2);
+  voice = Serial.readString();
+  delay(2);
+  Serial.println(voice);
+
+  
+
+if (voice == "turn left") {
+  left();
+}else if (voice == "left") {
+  left();
+}else if(voice == "turn right") {
+  right();
+}else if(voice == "right") {
+  right();
+}
+ 
+}
+while(voice == "move forward") {
+  forward();
+}
+while(voice == "move backward") {
+  backward();
+}
+}
